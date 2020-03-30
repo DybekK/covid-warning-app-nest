@@ -1,15 +1,16 @@
-import { Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 
 export interface User extends Document, Array<any> {
     _id: string;
-    username: string,
-    firstname?: string,
-    lastname?: string,
-    password: string,
-    age?: number,
+    username: string;
+    firstname?: string;
+    lastname?: string;
+    password: string;
+    age?: number;
     city: string;
     localization: {
         type: string;
         geometry?: Record<"cordinates", Array<number>>;
-    }
+    },
+    comparePassword(candidatePassword: string, cb: any): any;
 };

@@ -17,8 +17,16 @@ export class UsersService {
     return user.save();
   }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.userModel.findOne({username: username}).exec();
+  async findOne(username: string, password: string): Promise<User | undefined> {
+    return this.userModel.findOne({username: username}, (err, user) => {
+      if(err) throw err;
+
+      user.comparePassword(password, (err, isMatch) => {
+        if (err) throw err;
+        return user
+      });
+
+    });
   }
 
   async findAll(): Promise<User[] | undefined> {

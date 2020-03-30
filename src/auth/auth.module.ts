@@ -10,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [UsersModule, PassportModule, JwtModule.register({
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '60s'}
+    signOptions: { expiresIn: '360s'}
   })],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService]
