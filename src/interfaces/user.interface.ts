@@ -1,6 +1,7 @@
-import { Document, Schema } from 'mongoose';
+import { ILozalization } from '../interfaces/localization.interface';
+import { Document } from 'mongoose';
 
-export interface User extends Document, Array<any> {
+export interface IUser extends Document, Array<any> {
     _id: string;
     username: string;
     firstname?: string;
@@ -8,9 +9,6 @@ export interface User extends Document, Array<any> {
     password: string;
     age?: number;
     city: string;
-    localization: {
-        type: string;
-        geometry?: Record<"cordinates", Array<number>>;
-    },
+    localization: ILozalization
     comparePassword(candidatePassword: string, cb: any): any;
 };

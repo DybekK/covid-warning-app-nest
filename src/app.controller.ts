@@ -10,7 +10,6 @@ export class AppController {
 
   @Post('register')
   async register(@Request() req) {
-    console.log(req.body);
     return this.usersService.create(req.body);
   }
 
@@ -23,6 +22,6 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    return this.usersService.findOne(req.user.username);
   }
 }

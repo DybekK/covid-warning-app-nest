@@ -1,23 +1,28 @@
+import { ILozalization } from '../interfaces/localization.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from 'src/interfaces/user.interface';
+import { IUser } from 'src/interfaces/user.interface';
 import * as mongoose from 'mongoose';
-
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel('User')
-    private readonly userModel: Model<User>
+    private readonly userModel: Model<IUser>,
+    @InjectModel('Localization')
+    private readonly localizationModel: Model<ILozalization>
     ) {}
 
-  async create(createUserDto: User): Promise<User | undefined> {
+  async create(createUserDto: IUser): Promise<IUser | undefined> {
     const user = new this.userModel({...createUserDto, _id: new mongoose.Types.ObjectId()});
+    const localization = new this.localizationModel({...createUserDto.localization, _id: new mongoose.Types.ObjectId()})
+    user.localization = localization;
+    localization.save();
     return user.save();
   }
 
-  async findOne(username: string, password: string): Promise<User | undefined> {
+  async findOneToHash(username: string, password: string): Promise<IUser | undefined> {
     return this.userModel.findOne({username: username}, (err, user) => {
       if(err) throw err;
 
@@ -29,7 +34,11 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<User[] | undefined> {
+  async findOne(username: string): Promise<IUser | undefined> {
+    return this.userModel.findOne({username: username}).populate('localization');
+  }
+
+  async findAll(): Promise<IUser[] | undefined> {
     return this.userModel.findOne().exec();
   }
 }

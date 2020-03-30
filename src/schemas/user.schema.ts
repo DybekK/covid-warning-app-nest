@@ -21,6 +21,11 @@ export const UserSchema = new Schema({
         required: true
     },
     age: Number,
+    status: {
+        type: String,
+        enum: ['infected', 'contacted', 'safed', 'cured'],
+        default: 'safed'
+    },
     localization: {type: Schema.Types.ObjectId, ref: 'Localization'},
     createdAt: { type: Date, default: Date.now },
     updatedAt: {type: Date, default: Date.now}
