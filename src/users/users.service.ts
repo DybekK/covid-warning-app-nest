@@ -38,6 +38,10 @@ export class UsersService {
     return this.userModel.findOne({username: username}).populate('localization');
   }
 
+  async findById(id: string): Promise<IUser | undefined> {
+    return this.userModel.findById(id).populate('localization')
+  }
+
   async findAll(): Promise<IUser[] | undefined> {
     return this.userModel.findOne().exec();
   }

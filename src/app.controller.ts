@@ -1,12 +1,17 @@
+import { LocalizationsService } from './localizations/localizations.service';
 import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/local-auth-guard';
-import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Get, Put } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth-guard';
 
 @Controller()
 export class AppController {
-  constructor(private authService: AuthService, private usersService: UsersService) {}
+  constructor(
+    private readonly authService: AuthService, 
+    private readonly usersService: UsersService,
+    private readonly localizationsService: LocalizationsService
+    ) {}
 
   @Post('register')
   async register(@Request() req) {
@@ -14,14 +19,20 @@ export class AppController {
   }
 
   @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
+  @Post('login')
   async login(@Request() req) {
    return this.authService.login(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Put('localization')
   getProfile(@Request() req) {
-    return this.usersService.findOne(req.user.username);
+    return this.localizationsService.update(req.user._id, req.body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('localization')
+  getLocalization(@Request() req) {
+    return this.localizationsService.findOne(req.user._id)
   }
 }
