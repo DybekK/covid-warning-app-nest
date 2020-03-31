@@ -26,8 +26,20 @@ export class LocalizationsService {
         return user.localization;
     }
 
-    async searchForDanger(): Promise<any> {
-        
+    async searchForDanger(id: string): Promise<any> {
+        let cordinates = await this.findOne(id);
+        cordinates = cordinates.geometry.coordinates;
+        return this.localizationModel.find({"geometry.coordinates": {
+            $near: {
+                $geometry: { 
+                    type: "Point", 
+                    coordinates: cordinates 
+                },
+                $minDistance: 1000,
+                $maxDistance: 500000
+            }
+        }
+    }).exec();
     }
 
     // async findOne(username: string): Promise<ILozalization | undefined> {

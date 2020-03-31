@@ -26,7 +26,7 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Put('localization')
-  getProfile(@Request() req) {
+  updateLocalization(@Request() req) {
     console.log(req.user);
     return this.localizationsService.update(req.user._id, req.body.localization);
   }
@@ -35,5 +35,11 @@ export class AppController {
   @Get('localization')
   getLocalization(@Request() req) {
     return this.localizationsService.findOne(req.user._id)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('danger')
+  searchForDanger(@Request() req) {
+    return this.localizationsService.searchForDanger(req.user._id);
   }
 }
