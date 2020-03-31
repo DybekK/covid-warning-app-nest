@@ -13,16 +13,21 @@ export class LocalizationsService {
         private readonly usersService: UsersService
     ){}
 
-    async update(id: string, createLocalizationDto: ILozalization): Promise<ILozalization | undefined>{
+    async update(id: string, createLocalizationDto: ILozalization): Promise<ILozalization | undefined> {
         const user = await this.usersService.findById(id);
         let localization = await this.localizationModel.findById(user.localization._id);
-        localization = createLocalizationDto;
+        localization.city = createLocalizationDto.city;
+        localization.geometry = createLocalizationDto.geometry;
         return localization.save();
     }
 
     async findOne(id: string): Promise<ILozalization | undefined> {
         const user = await this.usersService.findById(id);
         return user.localization;
+    }
+
+    async searchForDanger(): Promise<any> {
+        
     }
 
     // async findOne(username: string): Promise<ILozalization | undefined> {

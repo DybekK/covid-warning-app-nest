@@ -27,7 +27,8 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Put('localization')
   getProfile(@Request() req) {
-    return this.localizationsService.update(req.user._id, req.body);
+    console.log(req.user);
+    return this.localizationsService.update(req.user._id, req.body.localization);
   }
 
   @UseGuards(JwtAuthGuard)
